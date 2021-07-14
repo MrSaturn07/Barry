@@ -472,4 +472,4 @@ async def hack(ctx,user:discord.Member = (None)):
   await asyncio.sleep(3)
   await hackmsg.edit(content="**The hack is complete**")
 
-bot.run('ODE1NDU1Njk5MTE0MjYyNTY4.YDsqTQ.vgDlLW74Iv-naRXcRtnAgTe7Zn4')
+bot.run('TOKEN')
