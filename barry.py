@@ -535,4 +535,4 @@ async def emoji(ctx, *, args):
   await ctx.send('<a:animeroll:799106437942345728>')
  
 
-bot.run('ODE1NDU1Njk5MTE0MjYyNTY4.YDsqTQ.RPIxl0rf-HhuFVWl-Ot106B3pAA')
+bot.run('TOKEN')
