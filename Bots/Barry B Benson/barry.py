@@ -1,8 +1,6 @@
 import discord
 from discord.abc import Messageable
 from discord.embeds import Embed
-
-#Define certain items here
 from discord.ext import commands
 bot = discord.Client()
 bot = commands.Bot(command_prefix='~')
@@ -14,6 +12,11 @@ import os
 from youtube_dl import YoutubeDL
 from Music import Music, Music
 import aiofiles
+import requests, json
+from geopy.geocoders import Nominatim
+from pyowm import OWM
+from pyowm.utils import config
+from pyowm.utils import timestamps
 bot.add_cog(Music(bot))
 
 @bot.event
@@ -21,8 +24,7 @@ async def on_ready():
  game = discord.Game('You like jazz? | ~help')
  await bot.change_presence(status=discord.Status.online, activity=game)
  print('We have logged in as {0.user}'.format(bot))
- 
-#Commands area
+
 @bot.command()
 async def badaim(ctx):
  """1990 mouse usin ass"""
@@ -149,12 +151,6 @@ async def image(ctx, *, arg):
 async def image_error(ctx, error):
  if isinstance(error, commands.BadArgument):
   await ctx.reply('`You failed, what an idiot`')
-
-@bot.event
-async def on_ready():
- game = discord.Game("You like Jazz")
- await bot.change_presence(status=discord.Status.online, activity=game)
- print('We have logged in as {0.user}'.format(bot))
 
 #Commands area
 @bot.command()
@@ -406,13 +402,13 @@ async def hack(ctx,user:discord.Member = (None)):
   await ctx.reply('`Error: Needs a target to hack stupid`')
   return
  else:
-  hackmsg = await ctx.reply("<a:redsiren:852370186467672114>**Starting the hack on {}.**<a:bluesiren:852370264334401536>".format(user))
+  hackmsg = await ctx.reply("<a:redsiren:867615081084223529>**Starting the hack on {}.**<a:bluesiren:867615267386818570>".format(user))
   await asyncio.sleep(1)
-  await hackmsg.edit(content="<a:redsiren:852370186467672114>**Starting the hack on {}..**<a:bluesiren:852370264334401536>".format(user))
+  await hackmsg.edit(content="<a:redsiren:867615081084223529>**Starting the hack on {}..**<a:bluesiren:867615267386818570>".format(user))
   await asyncio.sleep(1)
-  await hackmsg.edit(content="<a:redsiren:852370186467672114>**Starting the hack on {}...**<a:bluesiren:852370264334401536>".format(user))
+  await hackmsg.edit(content="<a:redsiren:867615081084223529>**Starting the hack on {}...**<a:bluesiren:867615267386818570>".format(user))
   await asyncio.sleep(1)
-  await hackmsg.edit(content="<a:redsiren:852370186467672114>**Starting the hack on {}.**<a:bluesiren:852370264334401536>".format(user))
+  await hackmsg.edit(content="<a:redsiren:867615081084223529>**Starting the hack on {}.**<a:bluesiren:867615267386818570>".format(user))
   await asyncio.sleep(1)
   await hackmsg.edit(content="**Finding info.**")
   await asyncio.sleep(1)
@@ -472,4 +468,71 @@ async def hack(ctx,user:discord.Member = (None)):
   await asyncio.sleep(3)
   await hackmsg.edit(content="**The hack is complete**")
 
-bot.run('TOKEN')
+@bot.command()
+async def weather(ctx, *, args):
+ api_key = "f7acdab230c0a3c9a66d2557419c2955"
+ base_url = "http://api.openweathermap.org/data/2.5/weather?"
+ locator = Nominatim(user_agent="myGeocoder")
+ location = locator.geocode(str(args))
+ lat = str(location.latitude)
+ lon = str(location.longitude)
+ complete_url = base_url + "appid=" + api_key + "&lat=" + lat + "&lon=" + lon + "&units=imperial"
+ response = requests.get(complete_url)
+ x = response.json()
+ if x["cod"] != "404":
+  y = x["main"]
+  current_temperature=str(y["temp"])
+  current_pressure=str(y["pressure"])
+  current_humidity=str(y["humidity"])
+  temp_min=str(y["temp_min"])
+  temp_max=str(y["temp_max"])
+  z = x["weather"]
+  weather_description = str(z[0]["description"])
+  wethr = discord.Embed(title='Weather',color=0xFFFF00)
+  wethr.add_field(name='Current Temperature',value=current_temperature + " Ferenheit",inline=False)
+  wethr.add_field(name='Low',value=temp_min + " Ferenheit",inline=False)
+  wethr.add_field(name='High',value=temp_max + " Ferenheit",inline=False)
+  wethr.add_field(name='Atmospheric Pressure (in hPa)',value=current_pressure,inline=False)
+  wethr.add_field(name='Humidity',value=current_humidity + "%",inline=False)
+  wethr.add_field(name='Weather Description',value=weather_description,inline=False)
+  await ctx.reply(embed=wethr)
+
+@bot.command()
+async def emoji(ctx, *, args):
+ if args == ':wumpbongo:':
+  await ctx.send('<a:wumpbongo:799111582130110515>')
+ if args == ':vibez:':
+  await ctx.send('<a:vibez:799108578920497172>')
+ if args == ':rgblob:':
+  await ctx.send('<a:rgblob:798608769897463858>')
+ if args == ':redsiren:':
+  await ctx.send('<a:redsiren:867615081084223529>')
+ if args == ':popcat:':
+  await ctx.send('<a:popcat:799111068168224808>')
+ if args == ':peacebruh:':
+  await ctx.send('<a:peacebruh:799108579051175936>')
+ if args == ':knowledge:':
+  await ctx.send('<a:knowledge:801824327053737994>')
+ if args == ':itwasme:':
+  await ctx.send('<a:itwasme:799111032575885342>')
+ if args == ':hydrate:':
+  await ctx.send('<a:hydrate:818297802081435648>')
+ if args == ':hornycord:':
+  await ctx.send('<a:hornycord:799111581900341270>')
+ if args == ':Fsmash:':
+  await ctx.send('<a:Fsmash:799108579151708182>')
+ if args == ':dino:':
+  await ctx.send('<a:dino:802596004938776646>')
+ if args == ':danceblob:':
+  await ctx.send('<a:danceblob:799108578882486283>')
+ if args == ':comeatme:':
+  await ctx.send('<a:comeatme:799112392264908810>')
+ if args == ':bluesiren:':
+  await ctx.send('<a:bluesiren:867615267386818570>')
+ if args ==':applecat:':
+  await ctx.send('<a:applecat:799111032705384498>')
+ if args == ':animeroll:':
+  await ctx.send('<a:animeroll:799106437942345728>')
+ 
+
+bot.run('PUT YOUR TOKEN HERE')
