@@ -86,7 +86,7 @@ class Music(commands.Cog):
                     await self.play_music()
 
     @commands.command(name="queue", help="Displays the current songs in queue")
-    async def q(self, ctx, *args):
+    async def q(self, ctx, *,args):
         retval = ""
         for i in range(0, len(self.music_queue)):
             retval += self.music_queue[i][0]['title'] + "\n"
